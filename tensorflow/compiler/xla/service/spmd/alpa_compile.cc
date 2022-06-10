@@ -154,11 +154,11 @@ StatusOr<std::shared_ptr<xla::HloModule>> RunAutoShardingPass(HloModule* hlo_mod
     post_spmd_module = hlo_module->Clone();
     HloPassPipeline post_auto_sharding_spmd("post-auto-sharding");
     if (num_partitions > 1) {
-      spmd_pipeline.AddPass<ShardingPropagation>(/*is_spmd=*/true);
-      spmd_pipeline.AddPass<StatefulRngSpmdPartitioner>(
+      post_auto_sharding_spmd.AddPass<ShardingPropagation>(/*is_spmd=*/true);
+      post_auto_sharding_spmd.AddPass<StatefulRngSpmdPartitioner>(
           num_partitions, hlo_module->config().replica_count());
-      spmd_pipeline.AddPass<RedundantSliceEliminator>();
-      spmd_pipeline.AddPass<GradAccRewrite>();
+      post_auto_sharding_spmd.AddPass<RedundantSliceEliminator>();
+      post_auto_sharding_spmd.AddPass<GradAccRewrite>();
     }
     TF_RETURN_IF_ERROR(post_auto_sharding_spmd.Run(post_spmd_module.get()).status());
   }
