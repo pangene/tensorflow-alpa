@@ -812,12 +812,15 @@ void BuildXlaCompilerSubmodule(py::module& m) {
         "get grad all-reduce channel ids", py::arg("module"),
         py::arg("grad_idx") = absl::nullopt);
 
-  m.def("run_auto_sharding", 
-        [](std::shared_ptr<HloModule> hlo_module, const CompileOptions& options) {
+  m.def("run_auto_sharding",
+        [](std::shared_ptr<HloModule> hlo_module, const CompileOptions& options)
+            -> StatusOr<std::shared_ptr<HloModule>> {
           py::gil_scoped_release gil_release;
-          TF_RETURN_IF_ERROR(spmd::RunAutoShardingPass(hlo_module.get(), options));
-          return Status::OK();
-        }, 
+          TF_ASSIGN_OR_RETURN(
+              auto post_spmd_module,
+              spmd::RunAutoShardingPass(hlo_module.get(), options));
+          return post_spmd_module;
+        },
         py::arg("hlo_module"), py::arg("compile_options") = CompileOptions());
 
   m.def("run_spmd_partitioner", 
