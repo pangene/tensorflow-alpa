@@ -38,7 +38,8 @@ StatusOr<bool> RedundantSliceEliminator::Run(HloModule* module) {
                     operand->dimensions()));
             ins->ReplaceAllUsesWith(new_ins);
           }
-        } else if (false && // Temporarily disable this because it is incompatible with
+        } else if (
+          // false && // Temporarily disable this because it is incompatible with
                             // ReduceScatterCreator. We need to adjust the order of passes.
                    operand->opcode() == HloOpcode::kConstant &&
                    operand->shape().rank() == 1 &&
@@ -117,7 +118,7 @@ StatusOr<bool> RedundantSliceEliminator::Run(HloModule* module) {
             HloInstruction* reshape_ins = ins->parent()->AddInstruction(
                 HloInstruction::CreateReshape(ins->shape(), add_ins));
             ins->ReplaceAllUsesWith(reshape_ins);
-          }
+          } 
 
           // Try pattern 2: a * (partition-id / k)
           // TODO(lmzheng): match this pattern

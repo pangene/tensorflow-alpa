@@ -24,6 +24,7 @@
 #include "tensorflow/compiler/xla/service/spmd/auto_sharding.h"
 #include "tensorflow/compiler/xla/service/spmd/grad_acc_rewrite.h"
 #include "tensorflow/compiler/xla/service/spmd/redundant_slice_eliminator.h"
+#include "tensorflow/compiler/xla/service/spmd/partition_id_eliminator.h"
 #include "tensorflow/compiler/xla/service/spmd/slice_auto_sharded_stages.h"
 #include "tensorflow/compiler/xla/service/spmd/stateful_rng_spmd_partitioner.h"
 #include "tensorflow/compiler/xla/service/transpose_folding.h"
@@ -150,6 +151,7 @@ StatusOr<std::shared_ptr<xla::HloModule>> RunAutoShardingPass(
       spmd_pipeline.AddPass<StatefulRngSpmdPartitioner>(
           num_partitions, hlo_module->config().replica_count());
       spmd_pipeline.AddPass<RedundantSliceEliminator>();
+      spmd_pipeline.AddPass<PartitionIdEliminator>();
       spmd_pipeline.AddPass<GradAccRewrite>();
     } else {
       spmd_pipeline.AddPass<SliceAutoShardedStages>();

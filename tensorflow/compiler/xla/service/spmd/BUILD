@@ -210,6 +210,18 @@ cc_library(
 )
 
 cc_library(
+    name = "partition_id_eliminator",
+    srcs = ["partition_id_eliminator.cc"],
+    hdrs = ["partition_id_eliminator.h"],
+    deps = [
+        "//tensorflow/compiler/xla:shape_util",
+        "//tensorflow/compiler/xla/service:hlo",
+        "//tensorflow/compiler/xla/service:hlo_dce",
+        "//tensorflow/compiler/xla/service:hlo_pass",
+    ],
+)
+
+cc_library(
     name = "grad_acc_rewrite",
     srcs = ["grad_acc_rewrite.cc"],
     hdrs = ["grad_acc_rewrite.h"],
@@ -241,6 +253,7 @@ cc_library(
     deps = [
         ":auto_sharding",
         ":redundant_slice_eliminator",
+        ":partition_id_eliminator",
         ":grad_acc_rewrite",
         ":slice_auto_sharded_stages",
         ":stateful_rng_spmd_partitioner",

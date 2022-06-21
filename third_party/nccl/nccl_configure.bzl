@@ -94,6 +94,7 @@ def _create_local_nccl_repository(repository_ctx):
             "%{nccl_header_dir}": config["nccl_include_dir"],
             "%{nccl_library_dir}": config["nccl_library_dir"],
         }
+        print(config_wrap)
         repository_ctx.template("BUILD", _label("system.BUILD.tpl"), config_wrap)
 
 def _create_remote_nccl_repository(repository_ctx, remote_config_repo):
