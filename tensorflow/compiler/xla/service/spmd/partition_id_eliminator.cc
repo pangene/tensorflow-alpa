@@ -1,6 +1,5 @@
 #include "tensorflow/compiler/xla/service/spmd/partition_id_eliminator.h"
 
-#include "absl/algorithm/container.h"
 #include "tensorflow/compiler/xla/service/hlo_dce.h"
 #include "tensorflow/compiler/xla/service/hlo_instruction.h"
 #include "tensorflow/compiler/xla/service/hlo_instructions.h"
@@ -23,7 +22,7 @@ StatusOr<bool> PartitionIdEliminator::Run(HloModule* module) {
         HloInstruction* param_ins = ins->parent()->AddEntryComputationParameter(
             HloInstruction::CreateParameter(param_num, ins->shape(), "partition-id")
         );
-        ins->ReplaceAllUsesWith(param_ins);
+        TF_RETURN_IF_ERROR(ins->ReplaceAllUsesWith(param_ins));
         changed = true;
       }
     }

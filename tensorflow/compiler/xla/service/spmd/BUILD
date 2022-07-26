@@ -222,6 +222,18 @@ cc_library(
 )
 
 cc_library(
+    name = "replica_group_resolver",
+    srcs = ["replica_group_resolver.cc"],
+    hdrs = ["replica_group_resolver.h"],
+    deps = [
+        "//tensorflow/compiler/xla:shape_util",
+        "//tensorflow/compiler/xla/service:hlo",
+        "//tensorflow/compiler/xla/service:hlo_dce",
+        "//tensorflow/compiler/xla/service:hlo_pass",
+    ],
+)
+
+cc_library(
     name = "grad_acc_rewrite",
     srcs = ["grad_acc_rewrite.cc"],
     hdrs = ["grad_acc_rewrite.h"],
@@ -254,6 +266,7 @@ cc_library(
         ":auto_sharding",
         ":redundant_slice_eliminator",
         ":partition_id_eliminator",
+        ":replica_group_resolver",
         ":grad_acc_rewrite",
         ":slice_auto_sharded_stages",
         ":stateful_rng_spmd_partitioner",

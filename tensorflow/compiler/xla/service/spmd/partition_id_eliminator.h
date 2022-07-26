@@ -10,10 +10,11 @@ namespace spmd {
 // This partition-id does not work as input to neuron-cc.
 // Instead, we create a parameter that takes in partition-id during runtime.
 //
-// TODO: before and after
 // Before:
+// %partition-id = u32[] partition-id()
 //
 // After:
+// %partition-id.1 = u32[] parameter(124)
 // 
 
 class PartitionIdEliminator : public HloModulePass {
